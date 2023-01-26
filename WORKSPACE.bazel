@@ -1,0 +1,23 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//:zig_cc_deps.bzl", "zig_cc_deps")
+zig_cc_deps()
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+load("@bazel-zig-cc//toolchain:defs.bzl", zig_toolchains = "toolchains")
+
+# C / C++ toolchains
+zig_toolchains()
+register_toolchains(
+    "@zig_sdk//libc_aware/toolchain:linux_amd64_gnu.2.34",
+    "@zig_sdk//libc_aware/toolchain:linux_arm64_gnu.2.34",
+    "@zig_sdk//toolchain:darwin_amd64",
+    "@zig_sdk//toolchain:darwin_arm64",
+    "@zig_sdk//toolchain:windows_amd64",
+    "@zig_sdk//toolchain:windows_arm64",
+)
+
+# Go toolchain
+load("//:go_deps.bzl", "go_deps")
+go_deps()
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+go_rules_dependencies()
+go_register_toolchains(version = "1.19.5")

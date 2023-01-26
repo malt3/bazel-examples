@@ -1,0 +1,6 @@
+cc_library(
+    name = "calc",
+    srcs = ["calc.c"],
+    hdrs = ["calc.h"],
+    visibility = ["//hello_cgo:__pkg__"],
+)
