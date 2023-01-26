@@ -1,0 +1,11 @@
+load(":go_multiarch.bzl", "go_image")
+
+go_image(
+    name = "hello_service",
+    base = "@distroless//image",
+    archs = [
+        "amd64",
+        "arm64",
+    ],
+    srcs = ["service.go"],
+)

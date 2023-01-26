@@ -21,3 +21,18 @@ go_deps()
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 go_rules_dependencies()
 go_register_toolchains(version = "1.19.5")
+
+# OCI rules
+load("//:oci_deps.bzl", "oci_deps")
+oci_deps()
+load("@rules_oci_bootstrap//:defs.bzl", "oci_blob_pull")
+oci_blob_pull(
+    name = "com_github_datadog_rules_oci",
+    digest = "sha256:cc6c59ed7da6bb376552461e06068f883bbe335359c122c15dce3c24e19cd8e2",
+    extract = True,
+    registry = "ghcr.io",
+    repository = "datadog/rules_oci/rules",
+    type = "tar.gz",
+)
+load("//:base_images.bzl", "pull_base_images")
+pull_base_images()
