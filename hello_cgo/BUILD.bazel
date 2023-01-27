@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel-zig-cc//rules:platform.bzl", "platform_binary")
 
 go_binary(
     name = "hello",
@@ -15,3 +16,21 @@ go_library(
     importpath = "github.com/malt3/bazel-examples/hello_cgo",
     visibility = ["//visibility:private"],
 )
+
+# create matrix builds for all platforms
+[
+    platform_binary(
+        name = "hello_{}".format(name),
+        src = "hello",
+        platform = platform,
+    )
+    for name, platform in [
+        ("linux_amd64_musl", "//libc_aware/platform:linux_amd64_musl"),
+        ("linux_amd64_gnu.2.34", "//libc_aware/platform:linux_amd64_gnu.2.34"),
+        ("linux_arm64_musl", "//libc_aware/platform:linux_arm64_musl"),
+        ("linux_arm64_gnu.2.34", "//libc_aware/platform:linux_arm64_gnu.2.34"),
+        # exclude darwin_amd64 for now, as it requires macOS sysroot
+        # see https://github.com/ziglang/zig/issues/10299 for more details
+        #("darwin_amd64", "//platform:darwin_amd64"),
+    ]
+]
