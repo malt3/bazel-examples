@@ -1,0 +1,43 @@
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@contrib_rules_oci//oci:defs.bzl", "oci_image")
+
+go_binary(
+    name = "hello_service",
+    srcs = ["service.go"],
+    gc_linkopts = [
+        "-linkmode",
+        "external",
+        "-extldflags",
+        "-static",
+    ],
+)
+
+pkg_tar(
+    name = "service_tar",
+    srcs = [
+        ":hello_service",
+    ],
+    mode = "0755",
+)
+
+pkg_tar(
+    name = "asset_tar",
+    srcs = [
+        "@gopher//file",
+    ],
+    mode = "0644",
+    package_dir = "/static",
+    remap_paths = {"/external/gopher/file": "/"},
+)
+
+oci_image(
+    name = "image",
+    architecture = "amd64",
+    entrypoint = ["/hello_service"],
+    os = "linux",
+    tars = [
+        "service_tar.tar",
+        "asset_tar.tar",
+    ],
+)
