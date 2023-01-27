@@ -1,11 +1,64 @@
-load(":go_multiarch.bzl", "go_image")
+load(":transition.bzl", "multi_arch")
+load(":platforms.bzl", "platforms")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@contrib_rules_oci//oci:defs.bzl", "oci_image", "oci_image_index", "oci_push")
 
-go_image(
+go_binary(
+    # name = select({
+    #     "@platforms//cpu:arm64": "hello_service_arm64",
+    #     "@platforms//cpu:x86_64": "hello_service_amd64",
+    # }),
     name = "hello_service",
-    base = "@distroless//image",
-    archs = [
-        "amd64",
-        "arm64",
-    ],
     srcs = ["service.go"],
+    cgo = True,
+    # goarch = select({
+    #     "@platforms//cpu:arm64": "arm64",
+    #     "@platforms//cpu:x86_64": "amd64",
+    # }),
+    # goos = select({
+    #     "@platforms//cpu:arm64": "linux",
+    #     "@platforms//cpu:x86_64": "linux",
+    # }),
 )
+
+pkg_tar(
+    name = "service_tar",
+    # srcs = select({
+    #     "@platforms//cpu:arm64": [":hello_service_arm64"],
+    #     "@platforms//cpu:x86_64": [":hello_service_amd64"],
+    # }),
+    srcs = [":hello_service"],
+    mode = "0755",
+)
+
+oci_image(
+    name = "image",
+    architecture = "amd64",
+    # architecture = select({
+    #     "@platforms//cpu:arm64": "arm64",
+    #     "@platforms//cpu:x86_64": "amd64",
+    # }),
+    # base = "//example:base",
+    entrypoint = ["/hello_service"],
+    os = "linux",
+    tars = ["service_tar.tar"],
+)
+
+# platforms()
+
+# multi_arch(
+#     name = "images",
+#     image = ":image",
+#     platforms = [
+#         "linux_amd64",
+#         "linux_arm64",
+#     ],
+# )
+
+# oci_image_index(
+#     name = "index",
+#     images = [
+#         ":images",
+#     ],
+# )
