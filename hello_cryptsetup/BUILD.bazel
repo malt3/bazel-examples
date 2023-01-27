@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "cryptsetup",
+    embed = [":hello_cryptsetup_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "hello_cryptsetup_lib",
+    srcs = ["hello_cryptsetup.go"],
+    importpath = "github.com/malt3/bazel-examples/hello_cryptsetup",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_martinjungblut_go_cryptsetup//:go-cryptsetup"],
+)

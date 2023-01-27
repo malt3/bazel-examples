@@ -1,6 +1,14 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_binary(
     name = "hello",
+    embed = [":hello_go_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "hello_go_lib",
     srcs = ["hello.go"],
+    importpath = "github.com/malt3/bazel-examples/hello_go",
+    visibility = ["//visibility:private"],
 )

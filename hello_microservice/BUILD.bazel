@@ -1,16 +1,17 @@
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@contrib_rules_oci//oci:defs.bzl", "oci_image")
 
 go_binary(
     name = "hello_service",
-    srcs = ["service.go"],
+    embed = [":hello_microservice_lib"],
     gc_linkopts = [
         "-linkmode",
         "external",
         "-extldflags",
         "-static",
     ],
+    visibility = ["//visibility:public"],
 )
 
 pkg_tar(
@@ -40,4 +41,11 @@ oci_image(
         "service_tar.tar",
         "asset_tar.tar",
     ],
+)
+
+go_library(
+    name = "hello_microservice_lib",
+    srcs = ["service.go"],
+    importpath = "github.com/malt3/bazel-examples/hello_microservice",
+    visibility = ["//visibility:private"],
 )

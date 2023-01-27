@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go-cryptsetup",
+    srcs = [
+        "const.go",
+        "device.go",
+        "devicetype.go",
+        "error.go",
+        "generic_params.go",
+        "log.go",
+        "luks1.go",
+        "luks2.go",
+        "plain.go",
+    ],
+    cgo = True,
+    cdeps = [
+        "@cryptsetup//:cryptsetup",
+    ],
+    importpath = "github.com/martinjungblut/go-cryptsetup",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":go-cryptsetup",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "go-cryptsetup_test",
+    srcs = [
+        "device_test.go",
+        "log_test.go",
+        "luks1_test.go",
+        "luks2_test.go",
+        "main_test.go",
+        "plain_test.go",
+    ],
+    embed = [":go-cryptsetup"],
+)

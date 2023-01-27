@@ -1,8 +1,17 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_binary(
     name = "hello",
+    embed = [":hello_cgo_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "hello_cgo_lib",
     srcs = ["hello.go"],
     cdeps = ["//lib/calc:calc"],
     cgo = True,
+    cppopts = ["-I."],
+    importpath = "github.com/malt3/bazel-examples/hello_cgo",
+    visibility = ["//visibility:private"],
 )
