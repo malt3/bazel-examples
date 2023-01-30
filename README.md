@@ -34,8 +34,8 @@ bazel run --config linux_amd64 //hello_cgo:hello
 ## Web service
 
 ```
-bazel build --config linux_amd64_static //hello_microservice:image
-podman load -i bazel-bin/hello_microservice/image
-podman run -it --rm -p 8080:80 localhost/bazel-bin/hello_microservice/image
+bazel build --config linux_amd64_static //hello_microservice:hello
+docker load --input $(bazel cquery --output=files //hello_microservice:hello)
+docker run -it --rm -p 8080:80 hello_microservice
 # open http://localhost:8080
 ```
