@@ -1,3 +1,17 @@
+# python toolchain
+load("//:python_deps.bzl", "python_deps")
+
+python_deps()
+
+load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
+
+py_repositories()
+
+python_register_toolchains(
+    name = "python3_9",
+    python_version = "3.9",
+)
+
 # proto toolchain
 load("//:proto_deps.bzl", "proto_deps")
 
