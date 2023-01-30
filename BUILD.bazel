@@ -1,4 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@bazeldnf//:def.bzl", "bazeldnf")
 
 # gazelle:prefix github.com/malt3/bazel-examples
 gazelle(name = "gazelle")
@@ -12,3 +13,5 @@ gazelle(
     ],
     command = "update-repos",
 )
+
+bazeldnf(name = "bazeldnf")

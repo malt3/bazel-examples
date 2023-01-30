@@ -1,3 +1,14 @@
+# proto toolchain
+load("//:proto_deps.bzl", "proto_deps")
+
+proto_deps()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
 # Go toolchain
 load("//:go_deps.bzl", "go_deps")
 
@@ -17,6 +28,18 @@ go_register_toolchains(version = "1.19.5")
 gazelle_dependencies(go_repository_default_config = "//:WORKSPACE.bazel")
 
 # gazelle:repo bazel_gazelle
+
+load("dnf_deps.bzl", "dnf_deps")
+
+dnf_deps()
+
+load("@bazeldnf//:deps.bzl", "bazeldnf_dependencies")
+
+bazeldnf_dependencies()
+
+load("rpms.bzl", "rpms")
+
+rpms()
 
 # C / C++ toolchains
 
@@ -39,11 +62,6 @@ register_toolchains(
     "@zig_sdk//toolchain:darwin_arm64",
     "@zig_sdk//toolchain:windows_amd64",
 )
-
-# external C libraries
-load("//:system_libs.bzl", "system_libs")
-
-system_libs()
 
 # Packaging rules (tar)
 load("//:pkg_deps.bzl", "pkg_deps")

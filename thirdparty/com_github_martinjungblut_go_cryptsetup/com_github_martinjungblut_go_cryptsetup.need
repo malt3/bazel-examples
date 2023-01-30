@@ -15,7 +15,7 @@ go_library(
     ],
     cgo = True,
     cdeps = [
-        "@cryptsetup//:cryptsetup",
+        "@//rpm:cryptsetup",
     ],
     importpath = "github.com/martinjungblut/go-cryptsetup",
     visibility = ["//visibility:public"],
