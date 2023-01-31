@@ -1,4 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@bazel-zig-cc//rules:platform.bzl", "platform_binary")
 
 go_binary(
     name = "cryptsetup",
@@ -13,3 +14,17 @@ go_library(
     visibility = ["//visibility:private"],
     deps = ["@com_github_martinjungblut_go_cryptsetup//:go-cryptsetup"],
 )
+
+# create matrix builds for all supported platforms
+[
+    platform_binary(
+        name = "cryptsetup_{}".format(name),
+        src = "cryptsetup",
+        platform = platform,
+        visibility = ["//visibility:public"],
+    )
+    for name, platform in [
+        ("linux_amd64_musl", "//libc_aware/platform:linux_amd64_musl"),
+        ("linux_amd64_gnu.2.34", "//libc_aware/platform:linux_amd64_gnu.2.34"),
+    ]
+]

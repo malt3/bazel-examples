@@ -2,7 +2,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@bazel-zig-cc//rules:platform.bzl", "platform_binary")
 
 go_binary(
-    name = "hello",
+    name = "hello_cgo",
     embed = [":hello_cgo_lib"],
     visibility = ["//visibility:public"],
 )
@@ -21,8 +21,9 @@ go_library(
 [
     platform_binary(
         name = "hello_{}".format(name),
-        src = "hello",
+        src = "hello_cgo",
         platform = platform,
+        visibility = ["//visibility:public"],
     )
     for name, platform in [
         ("linux_amd64_musl", "//libc_aware/platform:linux_amd64_musl"),

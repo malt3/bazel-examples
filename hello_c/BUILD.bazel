@@ -3,6 +3,7 @@ load("@bazel-zig-cc//rules:platform.bzl", "platform_binary")
 cc_binary(
     name = "hello",
     srcs = ["hello.c"],
+    visibility = ["//visibility:public"],
 )
 
 # create matrix builds for all platforms
@@ -11,6 +12,7 @@ cc_binary(
         name = "hello_{}".format(name),
         src = "hello",
         platform = platform,
+        visibility = ["//visibility:public"],
     )
     for name, platform in [
         ("linux_amd64_musl", "//libc_aware/platform:linux_amd64_musl"),

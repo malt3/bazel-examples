@@ -54,4 +54,5 @@ oci_tarball(
     name = "hello",
     image = ":image",
     repotags = ["hello_microservice:latest"],
+    visibility = ["//visibility:public"],
 )
