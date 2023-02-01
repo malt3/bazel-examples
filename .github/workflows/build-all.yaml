@@ -1,0 +1,31 @@
+name: Bazel build all
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  bazel-test:
+    name: Bazel build all
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          [
+            ubuntu-22.04,
+            ubuntu-20.04,
+            ubuntu-18.04,
+            windows-2022,
+            macos-12,
+            macos-11,
+          ]
+        target: [linux_amd64, linux_amd64_static]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+
+      - name: Run bazel build
+        shell: bash
+        run: bazelisk build --config ${{ matrix.target }} ...

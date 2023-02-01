@@ -1,0 +1,14 @@
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "allbins",
+    srcs = [
+        "//hello_c:hello",
+        "//hello_cc:hello_cc",
+        "//hello_go:hello_go",
+        "//hello_cgo:hello_cgo",
+        "//hello_cryptsetup:cryptsetup",
+        "//hello_microservice:hello",
+    ],
+    mode = "0755",
+)
