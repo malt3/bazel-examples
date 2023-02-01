@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "embed_all_lib",
+    srcs = ["main.go"],
+    embedsrcs = ["data/_hidden.txt"],
+    importpath = "github.com/malt3/bazel-examples/embed_all",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "embed_all",
+    embed = [":embed_all_lib"],
+    visibility = ["//visibility:public"],
+)

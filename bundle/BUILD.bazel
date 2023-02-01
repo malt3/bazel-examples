@@ -4,10 +4,10 @@ pkg_tar(
     name = "allbins",
     srcs = [
         "//hello_c:hello",
-        "//hello_cc:hello_cc",
-        "//hello_go:hello_go",
-        "//hello_cgo:hello_cgo",
+        "//hello_cc",
+        "//hello_cgo",
         "//hello_cryptsetup:cryptsetup",
+        "//hello_go",
         "//hello_microservice:hello",
     ],
     mode = "0755",
